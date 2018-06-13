@@ -9,14 +9,14 @@ import javax.persistence.*;
 public class DocumentModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
     private String name;
 
     @Lob
-    @Column
+    @Column(name = "picture")
     private byte[] pic;
 
     public DocumentModel(String name, byte[] pic) {
