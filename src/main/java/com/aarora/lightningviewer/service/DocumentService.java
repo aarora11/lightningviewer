@@ -25,14 +25,17 @@ import java.util.Optional;
 
 @Service
 public class DocumentService {
-    @Autowired
-    private DocumentRepository repository;
+    private final DocumentRepository repository;
 
-    @Autowired
-    private PDFDocument document;
+    private final PDFDocument document;
 
-    @Autowired
-    private SimpleRenderer simpleRenderer;
+    private final SimpleRenderer simpleRenderer;
+
+    public DocumentService(DocumentRepository repository, PDFDocument document, SimpleRenderer simpleRenderer) {
+        this.repository = repository;
+        this.document = document;
+        this.simpleRenderer = simpleRenderer;
+    }
 
     public void processDocument(MultipartFile file) {
         File dir = new File(Constants.TEMP_IMAGE_PATH);
@@ -51,10 +54,10 @@ public class DocumentService {
             //Read the image from the temp location in order to create a byte array
             BufferedImage bImage = ImageIO.read(new File(Constants.TEMP_IMAGE_PATH + "temp.png"));
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//            ImageIO.write(bImage, "png", bos);
+            ImageIO.write(bImage, "png", bos);
             byte[] arrayPic = bos.toByteArray();
 
-            DocumentModel model = new DocumentModel(file.getOriginalFilename(), arrayPic, FileUtils.readFileToByteArray(convFile));
+            DocumentModel model = new DocumentModel(file.getOriginalFilename(), arrayPic);
             /*
             Save the data to the database.
              */
@@ -71,5 +74,18 @@ public class DocumentService {
         } catch (RendererException e) {
             e.printStackTrace();
         }
+    }
+
+    public Iterable<DocumentModel> getAllValues() {
+        return repository.findAll();
+    }
+
+    public Optional<DocumentModel> getImageById(int id) {
+        return repository.findById(id);
+    }
+
+    public List<String> getAllDocumentNames() {
+
+        return repository.findAllDocumentNames();
     }
 }

@@ -19,19 +19,10 @@ public class DocumentModel {
     @Column(name = "picture")
     private byte[] pic;
 
-    @Lob
-    @Column(name = "document")
-    private byte[] document;
-
-    public byte[] getDocument() {
-        return document;
-    }
-
-    public DocumentModel(String name, byte[] pic, byte[] document) {
+    public DocumentModel(String name, byte[] pic) {
 
         this.name = name;
         this.pic = pic;
-        this.document = document;
     }
 
     public String getName() {
